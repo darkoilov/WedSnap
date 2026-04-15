@@ -169,15 +169,15 @@ UI:
 - Close (X) top-right
 - Background dark overlay
 ________________________________________
-🛠️ 3. ADMIN PANEL (MINIMAL) [ ] <-- NEXT STEP
+🛠️ 3. ADMIN PANEL (MINIMAL) [x] COMPLETED
 🎯 Goal
 Event owner manages uploads
 ________________________________________
-Layout [ ]
+Layout [x]
 - Max width: max-w-4xl
 - Grid or list layout
 ________________________________________
-Upload List [ ]
+Upload List [x]
 Props:
 uploads: {
   id: string
@@ -186,13 +186,13 @@ uploads: {
   size: number
 }[]
 ________________________________________
-UI [ ]
+UI [x]
 - Thumbnail preview
 - File size
 - Delete button (danger)
 - Optional: download button
 ________________________________________
-❌ 4. ERROR PAGE (INVALID EVENT) [ ]
+❌ 4. ERROR PAGE (INVALID EVENT) [ ] <-- NEXT STEP
 UI:
 - Message: "Настанот не постои"
 - Centered
