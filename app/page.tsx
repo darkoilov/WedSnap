@@ -12,13 +12,13 @@ interface EventPageProps {
 }
 
 export default function Home() {
-  // Props will come from API - placeholder for now
+  // Dummy data for preview - will come from API in production
   const eventData: EventPageProps = {
-    eventName: "",
-    eventDate: "",
-    eventLocation: "",
+    eventName: "Ana & Marko",
+    eventDate: "15 Јуни 2025",
+    eventLocation: "Скопје, Македонија",
     uploadEnabled: true,
-    remainingStorageMb: 450,
+    remainingStorageMb: 320,
     maxStorageMb: 500,
     eventStatus: "active",
   }
@@ -27,11 +27,11 @@ export default function Home() {
     <div className="flex min-h-screen items-center justify-center p-4 md:p-6">
       <main className="w-full max-w-md md:max-w-2xl space-y-6 text-center">
         {/* Header Component */}
-        <Header eventName={eventData.eventName || "Event Name"} />
+        <Header eventName={eventData.eventName} />
 
         {/* Event Info Component */}
         <EventInfo
-          eventDate={eventData.eventDate || "Event Date"}
+          eventDate={eventData.eventDate}
           eventLocation={eventData.eventLocation}
         />
 
