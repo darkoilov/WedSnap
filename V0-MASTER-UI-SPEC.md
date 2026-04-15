@@ -135,18 +135,18 @@ UI:
   "Upload лимитот е достигнат" OR
   "Овој настан е затворен"
 ________________________________________
-🖼️ 2. GALLERY PAGE [ ] <-- NEXT STEP
+🖼️ 2. GALLERY PAGE [x] COMPLETED
 🎯 Goal
 Users can view uploaded images
 ________________________________________
-📐 Layout [ ]
+📐 Layout [x]
 - Grid layout
 - 2 columns mobile
 - 3 columns tablet
 - 4 columns desktop
 - Gap: gap-2 or gap-4
 ________________________________________
-🔹 Image Grid [ ]
+🔹 Image Grid [x]
 Props:
 images: {
   id: string
@@ -156,11 +156,11 @@ images: {
   uploadedAt: string
 }[]
 ________________________________________
-🔹 Empty State [ ]
+🔹 Empty State [x]
 - Text: "Сѐ уште нема слики"
 - Centered
 ________________________________________
-🔹 Image Modal [ ]
+🔹 Image Modal [x]
 Props:
 - imageUrl: string
 
@@ -169,7 +169,7 @@ UI:
 - Close (X) top-right
 - Background dark overlay
 ________________________________________
-🛠️ 3. ADMIN PANEL (MINIMAL) [ ]
+🛠️ 3. ADMIN PANEL (MINIMAL) [ ] <-- NEXT STEP
 🎯 Goal
 Event owner manages uploads
 ________________________________________
