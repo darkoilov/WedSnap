@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Play } from "lucide-react"
+import { Play, Heart } from "lucide-react"
 import { ImageModal } from "./image-modal"
+import { useFavorites } from "@/components/providers/favorites-provider"
 import { MediaTabs, type MediaFilter, type LayoutMode } from "./media-tabs"
 import { cn } from "@/lib/utils"
 
@@ -25,6 +26,7 @@ export function ImageGrid({ images, showTabs = true }: ImageGridProps) {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [filter, setFilter] = useState<MediaFilter>("all")
   const [layout, setLayout] = useState<LayoutMode>("masonry")
+  const { favorites, favoritesCount } = useFavorites()
 
   if (images.length === 0) {
     return null
@@ -45,6 +47,7 @@ export function ImageGrid({ images, showTabs = true }: ImageGridProps) {
     if (filter === "all") return true
     if (filter === "images") return img.type === "image"
     if (filter === "videos") return img.type === "video"
+    if (filter === "favorites") return favorites.has(img.id)
     return true
   })
 
@@ -55,6 +58,7 @@ export function ImageGrid({ images, showTabs = true }: ImageGridProps) {
         <MediaTabs
           imageCount={imageCount}
           videoCount={videoCount}
+          favoritesCount={favoritesCount}
           activeFilter={filter}
           onFilterChange={setFilter}
           layoutMode={layout}
@@ -99,7 +103,11 @@ export function ImageGrid({ images, showTabs = true }: ImageGridProps) {
       {filteredImages.length === 0 && (
         <div className="py-12 text-center">
           <p className="text-muted-foreground">
-            {filter === "videos" ? "Нема прикачени видеа" : "Нема прикачени слики"}
+            {filter === "favorites" 
+              ? "Немате омилени слики" 
+              : filter === "videos" 
+                ? "Нема прикачени видеа" 
+                : "Нема прикачени слики"}
           </p>
         </div>
       )}
@@ -118,6 +126,8 @@ interface MediaCardProps {
   image: GalleryImage
   aspectClass: string
   onClick: () => void
+  isFavorite: boolean
+  onToggleFavorite: () => void
 }
 
 function MediaCard({ image, aspectClass, onClick }: MediaCardProps) {
