@@ -88,7 +88,7 @@ UI:
 - Small muted text (text-sm text-gray-500)
 - Centered under title
 ________________________________________
-Upload Section (MAIN) [ ] <-- NEXT STEP
+Upload Section (MAIN) [x] COMPLETED
 Props:
 - uploadEnabled: boolean
 - remainingStorageMb: number
@@ -96,36 +96,36 @@ Props:
 - eventStatus: "active" | "full" | "closed"
 ________________________________________
 🎯 STATES (VERY IMPORTANT)
-1. IDLE STATE [ ]
+1. IDLE STATE [x]
 - Large primary button (full width)
 - Text: "📸 Додади слики"
 - Subtext below: "Можеш да додадеш повеќе слики одеднаш"
 - Storage indicator:
   "Останато: X MB од Y MB"
 ________________________________________
-2. FILES SELECTED [ ]
+2. FILES SELECTED [x]
 - Show preview grid
 - Show file names
 - Show remove (X) button per file
 - Show upload button: "Прикачи"
 ________________________________________
-3. UPLOADING STATE [ ]
+3. UPLOADING STATE [x]
 - Disable buttons
 - Show progress bar
 - Show percentage
 - Optional spinner
 ________________________________________
-4. SUCCESS STATE [ ]
+4. SUCCESS STATE [x]
 - Large check icon
 - Text: "Сликите се успешно прикачени!"
 - Button: "Додади уште"
 ________________________________________
-5. ERROR STATE [ ]
+5. ERROR STATE [x]
 - Red message
 - Text: "Настана грешка. Обиди се повторно."
 - Button: Retry
 ________________________________________
-6. UPLOAD DISABLED [ ]
+6. UPLOAD DISABLED [x]
 Condition:
 eventStatus = "full" OR "closed"
 
@@ -135,7 +135,7 @@ UI:
   "Upload лимитот е достигнат" OR
   "Овој настан е затворен"
 ________________________________________
-🖼️ 2. GALLERY PAGE [ ]
+🖼️ 2. GALLERY PAGE [ ] <-- NEXT STEP
 🎯 Goal
 Users can view uploaded images
 ________________________________________

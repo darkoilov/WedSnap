@@ -1,9 +1,14 @@
-import { Header, EventInfo } from "@/components/event"
+import { Header, EventInfo, UploadSection } from "@/components/event"
+import type { EventStatus } from "@/components/event"
 
 interface EventPageProps {
   eventName: string
   eventDate: string
   eventLocation?: string
+  uploadEnabled: boolean
+  remainingStorageMb: number
+  maxStorageMb: number
+  eventStatus: EventStatus
 }
 
 export default function Home() {
@@ -12,6 +17,10 @@ export default function Home() {
     eventName: "",
     eventDate: "",
     eventLocation: "",
+    uploadEnabled: true,
+    remainingStorageMb: 450,
+    maxStorageMb: 500,
+    eventStatus: "active",
   }
 
   return (
@@ -26,12 +35,13 @@ export default function Home() {
           eventLocation={eventData.eventLocation}
         />
 
-        {/* Upload Section placeholder - Next Step */}
-        <div className="rounded-xl border border-dashed border-muted-foreground/30 p-8">
-          <p className="text-sm text-muted-foreground">
-            Upload Section - Coming in Step 3
-          </p>
-        </div>
+        {/* Upload Section Component */}
+        <UploadSection
+          uploadEnabled={eventData.uploadEnabled}
+          remainingStorageMb={eventData.remainingStorageMb}
+          maxStorageMb={eventData.maxStorageMb}
+          eventStatus={eventData.eventStatus}
+        />
       </main>
     </div>
   )
