@@ -192,56 +192,57 @@ UI [x]
 - Delete button (danger)
 - Optional: download button
 ________________________________________
-❌ 4. ERROR PAGE (INVALID EVENT) [ ] <-- NEXT STEP
+❌ 4. ERROR PAGE (INVALID EVENT) [x] COMPLETED
 UI:
 - Message: "Настанот не постои"
 - Centered
 - Button: "Назад"
 ________________________________________
-🔒 5. EVENT CLOSED PAGE [ ]
+🔒 5. EVENT CLOSED PAGE [x] COMPLETED
 UI:
 - Message: "Овој настан е затворен"
 - No upload button
 ________________________________________
-🧩 6. GLOBAL COMPONENTS [ ]
+🧩 6. GLOBAL COMPONENTS [x] COMPLETED
 ________________________________________
-Button [ ]
+Button [x] (components/ui/button.tsx)
 Variants:
-- primary (dark background, white text)
-- secondary (light border)
-- danger (red)
+- primary (dark background, white text) -> variant="default"
+- secondary (light border) -> variant="outline"
+- danger (red) -> variant="destructive"
 
 States:
-- hover
-- disabled
+- hover (built-in)
+- disabled (built-in)
 ________________________________________
-Card [ ]
+Card [x] (components/ui/card.tsx)
 - White background
 - Shadow
 - Rounded-xl
 - Padding p-4 or p-6
 ________________________________________
-Modal [ ]
+Modal [x] (components/ui/dialog.tsx)
 - Overlay (bg-black/50)
 - Centered content
 - Close button
 ________________________________________
-Progress Bar [ ]
+Progress Bar [x] (components/ui/progress.tsx)
 - Rounded
 - Smooth animation
 ________________________________________
-📱 7. RESPONSIVE RULES [ ]
+📱 7. RESPONSIVE RULES [x] COMPLETED
 Mobile-first:
-- All buttons full width
-- Stack vertically
+- All buttons full width (w-full)
+- Stack vertically (flex-col)
+- Max width: max-w-md
 
 Tablet:
-- Increase spacing
-- Improve grid
+- Increase spacing (p-6, gap-6)
+- Improve grid (grid-cols-3)
 
 Desktop:
-- Center content
-- Use wider container
+- Center content (mx-auto)
+- Use wider container (max-w-2xl, max-w-4xl)
 ________________________________________
 🎨 8. DESIGN SYSTEM [x] COMPLETED
 ________________________________________
