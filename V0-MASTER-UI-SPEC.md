@@ -61,7 +61,7 @@ ________________________________________
 🎯 Goal
 User can upload photos immediately after scanning QR
 ________________________________________
-📐 Layout Rules
+📐 Layout Rules [x] COMPLETED
 - Max width: max-w-md (mobile), max-w-2xl (desktop)
 - Centered container
 - Vertical spacing: space-y-6
@@ -69,7 +69,8 @@ ________________________________________
 - All content centered
 ________________________________________
 🧩 COMPONENT STRUCTURE
-Header
+
+Header [x] COMPLETED
 Props:
 - eventName: string
 
@@ -78,7 +79,7 @@ UI:
 - Centered
 - Elegant font weight (font-semibold)
 ________________________________________
-Event Info
+Event Info [x] COMPLETED
 Props:
 - eventDate: string
 - eventLocation?: string
@@ -87,7 +88,7 @@ UI:
 - Small muted text (text-sm text-gray-500)
 - Centered under title
 ________________________________________
-Upload Section (MAIN)
+Upload Section (MAIN) [ ] <-- NEXT STEP
 Props:
 - uploadEnabled: boolean
 - remainingStorageMb: number
@@ -95,36 +96,36 @@ Props:
 - eventStatus: "active" | "full" | "closed"
 ________________________________________
 🎯 STATES (VERY IMPORTANT)
-1. IDLE STATE
+1. IDLE STATE [ ]
 - Large primary button (full width)
 - Text: "📸 Додади слики"
 - Subtext below: "Можеш да додадеш повеќе слики одеднаш"
 - Storage indicator:
   "Останато: X MB од Y MB"
 ________________________________________
-2. FILES SELECTED
+2. FILES SELECTED [ ]
 - Show preview grid
 - Show file names
 - Show remove (X) button per file
 - Show upload button: "Прикачи"
 ________________________________________
-3. UPLOADING STATE
+3. UPLOADING STATE [ ]
 - Disable buttons
 - Show progress bar
 - Show percentage
 - Optional spinner
 ________________________________________
-4. SUCCESS STATE
+4. SUCCESS STATE [ ]
 - Large check icon
 - Text: "Сликите се успешно прикачени!"
 - Button: "Додади уште"
 ________________________________________
-5. ERROR STATE
+5. ERROR STATE [ ]
 - Red message
 - Text: "Настана грешка. Обиди се повторно."
 - Button: Retry
 ________________________________________
-6. UPLOAD DISABLED
+6. UPLOAD DISABLED [ ]
 Condition:
 eventStatus = "full" OR "closed"
 
@@ -134,18 +135,18 @@ UI:
   "Upload лимитот е достигнат" OR
   "Овој настан е затворен"
 ________________________________________
-🖼️ 2. GALLERY PAGE
+🖼️ 2. GALLERY PAGE [ ]
 🎯 Goal
 Users can view uploaded images
 ________________________________________
-📐 Layout
+📐 Layout [ ]
 - Grid layout
 - 2 columns mobile
 - 3 columns tablet
 - 4 columns desktop
 - Gap: gap-2 or gap-4
 ________________________________________
-🔹 Image Grid
+🔹 Image Grid [ ]
 Props:
 images: {
   id: string
@@ -155,11 +156,11 @@ images: {
   uploadedAt: string
 }[]
 ________________________________________
-🔹 Empty State
+🔹 Empty State [ ]
 - Text: "Сѐ уште нема слики"
 - Centered
 ________________________________________
-🔹 Image Modal
+🔹 Image Modal [ ]
 Props:
 - imageUrl: string
 
@@ -168,15 +169,15 @@ UI:
 - Close (X) top-right
 - Background dark overlay
 ________________________________________
-🛠️ 3. ADMIN PANEL (MINIMAL)
+🛠️ 3. ADMIN PANEL (MINIMAL) [ ]
 🎯 Goal
 Event owner manages uploads
 ________________________________________
-Layout
+Layout [ ]
 - Max width: max-w-4xl
 - Grid or list layout
 ________________________________________
-Upload List
+Upload List [ ]
 Props:
 uploads: {
   id: string
@@ -185,26 +186,26 @@ uploads: {
   size: number
 }[]
 ________________________________________
-UI
+UI [ ]
 - Thumbnail preview
 - File size
 - Delete button (danger)
 - Optional: download button
 ________________________________________
-❌ 4. ERROR PAGE (INVALID EVENT)
+❌ 4. ERROR PAGE (INVALID EVENT) [ ]
 UI:
 - Message: "Настанот не постои"
 - Centered
 - Button: "Назад"
 ________________________________________
-🔒 5. EVENT CLOSED PAGE
+🔒 5. EVENT CLOSED PAGE [ ]
 UI:
 - Message: "Овој настан е затворен"
 - No upload button
 ________________________________________
-🧩 6. GLOBAL COMPONENTS
+🧩 6. GLOBAL COMPONENTS [ ]
 ________________________________________
-Button
+Button [ ]
 Variants:
 - primary (dark background, white text)
 - secondary (light border)
@@ -214,22 +215,22 @@ States:
 - hover
 - disabled
 ________________________________________
-Card
+Card [ ]
 - White background
 - Shadow
 - Rounded-xl
 - Padding p-4 or p-6
 ________________________________________
-Modal
+Modal [ ]
 - Overlay (bg-black/50)
 - Centered content
 - Close button
 ________________________________________
-Progress Bar
+Progress Bar [ ]
 - Rounded
 - Smooth animation
 ________________________________________
-📱 7. RESPONSIVE RULES
+📱 7. RESPONSIVE RULES [ ]
 Mobile-first:
 - All buttons full width
 - Stack vertically
@@ -242,24 +243,24 @@ Desktop:
 - Center content
 - Use wider container
 ________________________________________
-🎨 8. DESIGN SYSTEM
+🎨 8. DESIGN SYSTEM [x] COMPLETED
 ________________________________________
-Colors
+Colors [x]
 Primary: gray-900
 Background: white
 Accent: beige / gray-100
 Error: red-500
 Success: green-500
 ________________________________________
-Typography
+Typography [x]
 - Title: text-2xl / text-3xl
 - Body: text-base
 - Small: text-sm
 ________________________________________
-Spacing
+Spacing [x]
 space-y-4 / space-y-6
 ________________________________________
-Radius
+Radius [x]
 rounded-xl everywhere
 ________________________________________
 ⚠️ 9. EDGE CASES
