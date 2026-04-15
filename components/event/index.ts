@@ -1,4 +1,7 @@
 export { Header } from "./header"
 export { EventInfo } from "./event-info"
 export { UploadSection } from "./upload-section"
+export { HeroSection } from "./hero-section"
+export { UploadSuccess } from "./upload-success"
+export { QRCodeDisplay } from "./qr-code-display"
 export type { UploadState, EventStatus } from "./upload-section"
