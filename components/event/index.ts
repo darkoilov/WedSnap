@@ -1,5 +1,6 @@
 export { Header } from "./header"
 export { EventInfo } from "./event-info"
+export { EventPageShell } from "./event-page-shell"
 export { UploadSection } from "./upload-section"
 export { HeroSection } from "./hero-section"
 export { UploadSuccess } from "./upload-success"

@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EventStatus {
+  ACTIVE
+  FULL
+  CLOSED
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum UploadStatus {
+  PENDING
+  UPLOADED
+  PROCESSED
+  FAILED
+  DELETED
+}
+
+model Event {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  name          String
+  eventDate     DateTime?
+  location      String?
+  status        EventStatus @default(ACTIVE)
+  allowGallery  Boolean     @default(true)
+  allowVideos   Boolean     @default(false)
+  maxStorageMb  Int         @default(51200)
+  maxFiles      Int         @default(5000)
+  storageUsedMb Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  uploads       Upload[]
+
+  @@index([status])
+}
+
+model Upload {
+  id                  String       @id
+  eventId             String
+  originalFilename    String
+  storageKeyOriginal  String
+  storageKeyOptimized String?
+  storageKeyThumbnail String?
+  mimeType            String
+  mediaType           MediaType
+  sizeBytes           Int
+  width               Int?
+  height              Int?
+  status              UploadStatus @default(PENDING)
+  uploadedAt          DateTime     @default(now())
+  deletedAt           DateTime?
+  checksum            String?
+  uploaderLabel       String?
+  deviceInfo          String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  event               Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([eventId, uploadedAt(sort: Desc)])
+  @@index([eventId, status])
+}

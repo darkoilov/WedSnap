@@ -6,9 +6,8 @@ import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Wedding QR - Share Your Moments',
-  description: 'Upload and share wedding photos instantly via QR code',
-  generator: 'v0.app',
+  title: 'WedSnap',
+  description: 'Event-scoped wedding photo uploads with QR sharing, gallery, and admin tools.',
   icons: {
     icon: [
       {

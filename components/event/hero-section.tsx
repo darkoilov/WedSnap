@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { Calendar, MapPin, Camera } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 interface HeroSectionProps {
   eventName: string
@@ -16,23 +17,32 @@ export function HeroSection({
   eventName,
   eventDate,
   eventLocation,
-  coverImageUrl = "https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80",
+  coverImageUrl,
   onUploadClick,
 }: HeroSectionProps) {
   return (
     <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden md:h-[70vh]">
-      {/* Background Image */}
-      <Image
-        src={coverImageUrl}
-        alt={eventName}
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
+      {coverImageUrl ? (
+        <Image
+          src={coverImageUrl}
+          alt={eventName}
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_hsl(var(--primary)/0.24),_transparent_55%),linear-gradient(135deg,hsl(var(--muted)),hsl(var(--background))_45%,hsl(var(--accent)))]" />
+      )}
+
+      <div
+        className={cn(
+          "absolute inset-0",
+          coverImageUrl
+            ? "bg-gradient-to-t from-black/70 via-black/30 to-black/10"
+            : "bg-gradient-to-t from-black/35 via-black/10 to-transparent"
+        )}
       />
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-end p-6 pb-12 text-center text-white md:pb-16">

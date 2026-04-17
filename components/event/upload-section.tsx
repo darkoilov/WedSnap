@@ -1,10 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { Camera, X, CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
+import { AlertCircle, Camera, CheckCircle2, Loader2, X } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { cn } from "@/lib/utils"
 
 export type UploadState = "idle" | "selected" | "uploading" | "success" | "error"
 
@@ -39,8 +39,8 @@ export function UploadSection({
 
   const isDisabled = !uploadEnabled || eventStatus === "full" || eventStatus === "closed"
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
     if (!files || files.length === 0) return
 
     const newFiles: SelectedFile[] = Array.from(files).map((file) => ({
@@ -51,8 +51,7 @@ export function UploadSection({
 
     setSelectedFiles((prev) => [...prev, ...newFiles])
     setUploadState("selected")
-    
-    // Reset input
+
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
@@ -60,16 +59,17 @@ export function UploadSection({
 
   const handleRemoveFile = (id: string) => {
     setSelectedFiles((prev) => {
-      const updated = prev.filter((f) => f.id !== id)
-      // Revoke URL for removed file
-      const removed = prev.find((f) => f.id === id)
+      const updated = prev.filter((file) => file.id !== id)
+      const removed = prev.find((file) => file.id === id)
+
       if (removed) {
         URL.revokeObjectURL(removed.preview)
       }
-      // If no files left, go back to idle
+
       if (updated.length === 0) {
         setUploadState("idle")
       }
+
       return updated
     })
   }
@@ -81,35 +81,47 @@ export function UploadSection({
     setUploadProgress(0)
     setErrorMessage("")
 
+    let progressInterval: ReturnType<typeof setInterval> | null = null
+
     try {
-      // Simulate progress (in real app, this would come from upload API)
-      const progressInterval = setInterval(() => {
+      progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 90) {
-            clearInterval(progressInterval)
+            if (progressInterval) {
+              clearInterval(progressInterval)
+            }
             return prev
           }
+
           return prev + 10
         })
       }, 200)
 
       if (onUpload) {
-        await onUpload(selectedFiles.map((f) => f.file))
+        await onUpload(selectedFiles.map((entry) => entry.file))
       } else {
-        // Simulate upload delay for demo
         await new Promise((resolve) => setTimeout(resolve, 2000))
       }
 
-      clearInterval(progressInterval)
+      if (progressInterval) {
+        clearInterval(progressInterval)
+      }
+
       setUploadProgress(100)
-      
-      // Cleanup previews
-      selectedFiles.forEach((f) => URL.revokeObjectURL(f.preview))
+      selectedFiles.forEach((entry) => URL.revokeObjectURL(entry.preview))
       setSelectedFiles([])
       setUploadState("success")
     } catch (error) {
+      if (progressInterval) {
+        clearInterval(progressInterval)
+      }
+
       setUploadState("error")
-      setErrorMessage("Настана грешка. Обиди се повторно.")
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Nastana greska. Obidi se povtorno."
+      )
     }
   }
 
@@ -127,16 +139,14 @@ export function UploadSection({
     fileInputRef.current?.click()
   }
 
-  // Get disabled message
   const getDisabledMessage = () => {
-    if (eventStatus === "full") return "Upload лимитот е достигнат"
-    if (eventStatus === "closed") return "Овој настан е затворен"
+    if (eventStatus === "full") return "Upload limitot e dostignat"
+    if (eventStatus === "closed") return "Ovoj nastan e zatvoren"
     return ""
   }
 
   return (
     <div className="w-full space-y-4">
-      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -147,22 +157,16 @@ export function UploadSection({
         disabled={isDisabled || uploadState === "uploading"}
       />
 
-      {/* DISABLED STATE */}
       {isDisabled && (
         <div className="flex flex-col items-center space-y-4">
-          <Button
-            size="lg"
-            className="w-full rounded-xl py-6 text-lg"
-            disabled
-          >
+          <Button size="lg" className="w-full rounded-xl py-6 text-lg" disabled>
             <Camera className="mr-2 size-5" />
-            Додади слики
+            Dodadi sliki
           </Button>
           <p className="text-sm text-muted-foreground">{getDisabledMessage()}</p>
         </div>
       )}
 
-      {/* IDLE STATE */}
       {!isDisabled && uploadState === "idle" && (
         <div className="flex flex-col items-center space-y-4">
           <Button
@@ -171,21 +175,19 @@ export function UploadSection({
             onClick={triggerFileInput}
           >
             <Camera className="mr-2 size-5" />
-            Додади слики
+            Dodadi sliki
           </Button>
           <p className="text-sm text-muted-foreground">
-            Можеш да додадеш повеќе слики одеднаш
+            Mozes da dodades povekje sliki odednas
           </p>
           <p className="text-sm text-muted-foreground">
-            Останато: {remainingStorageMb} MB од {maxStorageMb} MB
+            Ostanato: {remainingStorageMb} MB od {maxStorageMb} MB
           </p>
         </div>
       )}
 
-      {/* FILES SELECTED STATE */}
       {!isDisabled && uploadState === "selected" && (
         <div className="space-y-4">
-          {/* Preview Grid */}
           <div className="grid grid-cols-3 gap-2">
             {selectedFiles.map((file) => (
               <div key={file.id} className="relative aspect-square">
@@ -203,7 +205,6 @@ export function UploadSection({
                 </button>
               </div>
             ))}
-            {/* Add more button */}
             <button
               onClick={triggerFileInput}
               className="flex aspect-square items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/30 text-muted-foreground transition-colors hover:border-muted-foreground/50 hover:text-foreground"
@@ -213,28 +214,25 @@ export function UploadSection({
             </button>
           </div>
 
-          {/* File count */}
           <p className="text-center text-sm text-muted-foreground">
-            {selectedFiles.length} {selectedFiles.length === 1 ? "слика" : "слики"} избрани
+            {selectedFiles.length} {selectedFiles.length === 1 ? "slika" : "sliki"} izbrani
           </p>
 
-          {/* Upload button */}
           <Button
             size="lg"
             className="w-full rounded-xl py-6 text-lg"
             onClick={handleUpload}
           >
-            Прикачи
+            Prikaci
           </Button>
         </div>
       )}
 
-      {/* UPLOADING STATE */}
       {!isDisabled && uploadState === "uploading" && (
         <div className="flex flex-col items-center space-y-4">
           <div className="flex items-center gap-2">
             <Loader2 className="size-5 animate-spin" />
-            <span className="text-sm font-medium">Се прикачува...</span>
+            <span className="text-sm font-medium">Se prikacuva...</span>
           </div>
           <div className="w-full space-y-2">
             <Progress value={uploadProgress} className="h-3 rounded-full" />
@@ -242,52 +240,44 @@ export function UploadSection({
               {uploadProgress}%
             </p>
           </div>
-          <Button
-            size="lg"
-            className="w-full rounded-xl py-6 text-lg"
-            disabled
-          >
+          <Button size="lg" className="w-full rounded-xl py-6 text-lg" disabled>
             <Loader2 className="mr-2 size-5 animate-spin" />
-            Се прикачува...
+            Se prikacuva...
           </Button>
         </div>
       )}
 
-      {/* SUCCESS STATE */}
       {!isDisabled && uploadState === "success" && (
         <div className="flex flex-col items-center space-y-4">
           <div className="flex size-16 items-center justify-center rounded-full bg-green-100">
             <CheckCircle2 className="size-10 text-green-600" />
           </div>
           <p className="text-lg font-medium text-foreground">
-            Сликите се успешно прикачени!
+            Slikite se uspesno prikaceni!
           </p>
           <Button
             size="lg"
             className="w-full rounded-xl py-6 text-lg"
             onClick={handleAddMore}
           >
-            Додади уште
+            Dodadi uste
           </Button>
         </div>
       )}
 
-      {/* ERROR STATE */}
       {!isDisabled && uploadState === "error" && (
         <div className="flex flex-col items-center space-y-4">
           <div className="flex size-16 items-center justify-center rounded-full bg-red-100">
             <AlertCircle className="size-10 text-destructive" />
           </div>
-          <p className="text-center text-destructive">
-            {errorMessage}
-          </p>
+          <p className="text-center text-destructive">{errorMessage}</p>
           <Button
             size="lg"
             variant="destructive"
             className="w-full rounded-xl py-6 text-lg"
             onClick={handleRetry}
           >
-            Обиди се повторно
+            Obidi se povtorno
           </Button>
         </div>
       )}

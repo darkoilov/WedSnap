@@ -2,9 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Trash2, Download, Video, ImageIcon, AlertCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { AlertCircle, Download, ImageIcon, Trash2, Video } from "lucide-react"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +15,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 
 export interface Upload {
   id: string
@@ -24,6 +25,7 @@ export interface Upload {
   type: "image" | "video"
   size: number
   uploadedAt: string
+  filename?: string
 }
 
 interface UploadListProps {
@@ -32,16 +34,16 @@ interface UploadListProps {
   onDownload?: (id: string, url: string) => void
 }
 
-function formatFileSize(bytes: number): string {
+function formatFileSize(bytes: number) {
   if (bytes === 0) return "0 B"
-  const k = 1024
-  const sizes = ["B", "KB", "MB", "GB"]
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i]
+  const units = ["B", "KB", "MB", "GB"]
+  const index = Math.floor(Math.log(bytes) / Math.log(1024))
+  return `${parseFloat((bytes / Math.pow(1024, index)).toFixed(1))} ${units[index]}`
 }
 
-function formatDate(dateString: string): string {
+function formatDate(dateString: string) {
   const date = new Date(dateString)
+
   return date.toLocaleDateString("mk-MK", {
     day: "numeric",
     month: "short",
@@ -56,6 +58,7 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
 
   const handleDelete = async (id: string) => {
     if (!onDelete) return
+
     setDeletingId(id)
     try {
       await onDelete(id)
@@ -67,9 +70,10 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
   const handleDownload = (id: string, url: string) => {
     if (onDownload) {
       onDownload(id, url)
-    } else {
-      window.open(url, "_blank")
+      return
     }
+
+    window.open(url, "_blank", "noopener,noreferrer")
   }
 
   if (uploads.length === 0) {
@@ -79,7 +83,7 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
             <ImageIcon className="h-6 w-6 text-muted-foreground" />
           </div>
-          <p className="text-muted-foreground">Нема прикачени фајлови</p>
+          <p className="text-muted-foreground">Nema prikaceni fajlovi</p>
         </div>
       </Card>
     )
@@ -89,7 +93,6 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {uploads.map((upload) => (
         <Card key={upload.id} className="overflow-hidden">
-          {/* Thumbnail */}
           <div className="relative aspect-video bg-muted">
             {upload.type === "video" ? (
               <div className="flex h-full items-center justify-center">
@@ -98,7 +101,7 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
             ) : (
               <Image
                 src={upload.thumbnailUrl || upload.url}
-                alt="Upload thumbnail"
+                alt={upload.filename || "Upload thumbnail"}
                 fill
                 className="object-cover"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -106,12 +109,11 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
             )}
           </div>
 
-          {/* Details */}
           <div className="p-4">
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">
-                  {upload.type === "video" ? "Видео" : "Слика"}
+                  {upload.filename || (upload.type === "video" ? "Video" : "Slika")}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {formatFileSize(upload.size)}
@@ -121,17 +123,16 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
                 </p>
               </div>
 
-              {/* Actions */}
               <div className="flex gap-1">
                 <Button
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8"
                   onClick={() => handleDownload(upload.id, upload.url)}
-                  title="Преземи"
+                  title="Prezemi"
                 >
                   <Download className="h-4 w-4" />
-                  <span className="sr-only">Преземи</span>
+                  <span className="sr-only">Prezemi</span>
                 </Button>
 
                 <AlertDialog>
@@ -141,30 +142,30 @@ export function UploadList({ uploads, onDelete, onDownload }: UploadListProps) {
                       size="icon"
                       className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
                       disabled={deletingId === upload.id}
-                      title="Избриши"
+                      title="Izbrisi"
                     >
                       <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Избриши</span>
+                      <span className="sr-only">Izbrisi</span>
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle className="flex items-center gap-2">
                         <AlertCircle className="h-5 w-5 text-destructive" />
-                        Избриши фајл
+                        Izbrisi fajl
                       </AlertDialogTitle>
                       <AlertDialogDescription>
-                        Дали сте сигурни дека сакате да го избришете овој фајл?
-                        Оваа акција не може да се поништи.
+                        Dali ste sigurni deka sakate da go izbrisete ovoj fajl?
+                        Ovaa akcija ne moze da se ponisti.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Откажи</AlertDialogCancel>
+                      <AlertDialogCancel>Otkazi</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => handleDelete(upload.id)}
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                       >
-                        Избриши
+                        Izbrisi
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

@@ -6,19 +6,34 @@ import { Button } from "@/components/ui/button"
 
 const pages = [
   {
-    name: "Event Upload Page",
+    name: "Project Home",
     path: "/",
-    description: "Main event page with upload functionality",
+    description: "Foundation landing page for event-scoped routes",
   },
   {
-    name: "Gallery Page",
-    path: "/gallery",
-    description: "Photo gallery with image grid",
+    name: "Event Upload Page",
+    path: "/e/demo-event",
+    description: "Dynamic event route placeholder",
   },
   {
-    name: "Admin Dashboard",
+    name: "Event Gallery",
+    path: "/e/demo-event/gallery",
+    description: "Dynamic gallery route placeholder",
+  },
+  {
+    name: "Event Admin",
+    path: "/admin/events/demo-event",
+    description: "Dynamic admin route placeholder",
+  },
+  {
+    name: "Admin Index",
     path: "/admin",
-    description: "Admin panel for managing uploads",
+    description: "Explains the new event-scoped admin path",
+  },
+  {
+    name: "Gallery Index",
+    path: "/gallery",
+    description: "Explains the new event-scoped gallery path",
   },
   {
     name: "Error Page",
@@ -62,7 +77,7 @@ export default function DemoPage() {
         <Card className="border-dashed">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground text-center">
-              All pages now have dummy data to preview the UI
+              Prototype pages now coexist with the event-scoped MVP route structure
             </p>
           </CardContent>
         </Card>

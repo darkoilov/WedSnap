@@ -1,35 +1,90 @@
 # WedSnap
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+WedSnap is a Next.js MVP for event-scoped wedding photo collection.
 
-## Built with v0
+Guests can:
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+- open an event page at `/e/[eventSlug]`
+- upload photos through signed R2 upload URLs
+- browse an event gallery when enabled
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_6R8YuqFyVzDD97QTa8c14QeI4ICe)
+Event owners can:
 
-## Getting Started
+- open `/admin/events/[eventSlug]`
+- inspect uploaded media
+- download originals
+- delete uploads and recalculate event storage usage
 
-First, run the development server:
+## Stack
+
+- Next.js App Router
+- PostgreSQL + Prisma
+- Cloudflare R2
+- Sharp
+- Zod
+- Vitest
+
+## Required Environment Variables
+
+Copy [.env.example](./.env.example) and fill in:
+
+- `DATABASE_URL`
+- `R2_ACCOUNT_ID`
+- `R2_BUCKET_NAME`
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+- `R2_PUBLIC_BASE_URL`
+- `SIGNED_URL_EXPIRY_SECONDS`
+- `MAX_UPLOAD_MB_DEFAULT`
+- `MAX_EVENT_STORAGE_MB_DEFAULT`
+- `NEXT_PUBLIC_APP_URL`
+
+## Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
+pnpm build
+pnpm test
+pnpm db:generate
+pnpm db:push
+pnpm db:seed
+pnpm db:setup
+pnpm db:studio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Create `.env` from `.env.example`.
+2. Point `DATABASE_URL` to your Postgres database.
+3. Fill in the Cloudflare R2 credentials and bucket values.
+4. Run `pnpm install`.
+5. Run `pnpm db:setup`.
+6. Start the app with `pnpm dev`.
 
-## Learn More
+The seed script creates a default `demo-event` record so these routes work immediately:
 
-To learn more, take a look at the following resources:
+- `/e/demo-event`
+- `/e/demo-event/gallery`
+- `/admin/events/demo-event`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+## Production Notes
 
-<a href="https://v0.app/chat/api/kiro/clone/darkoilov/WedSnap" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+- The R2 bucket must stay private.
+- Uploads are written with signed PUT URLs only.
+- Gallery and admin previews rely on signed read URLs or derivative assets.
+- `NEXT_PUBLIC_APP_URL` must be set to the real deployed app URL.
+- Run `pnpm db:generate` and `pnpm db:push` during initial deployment before serving traffic.
+
+## Current Scope
+
+Implemented:
+
+- event public page
+- signed upload init/complete flow
+- derivative generation for thumbnails and optimized images
+- event gallery
+- event admin page
+- delete flow
+- rate limiting, logging, and basic tests
+
+Backlog items remain tracked in [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md).
