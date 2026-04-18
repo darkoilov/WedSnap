@@ -17,6 +17,7 @@ interface EventPageShellProps {
     location: string | null
     status: EventStatus
     allowGallery: boolean
+    allowVideos: boolean
     maxStorageMb: number
     storageUsedMb: number
   }
@@ -111,6 +112,7 @@ export function EventPageShell({ event, appBaseUrl }: EventPageShellProps) {
             <div className="mx-auto max-w-md">
               <UploadSection
                 uploadEnabled={event.status === "active"}
+                allowVideos={event.allowVideos}
                 remainingStorageMb={remainingStorageMb}
                 maxStorageMb={event.maxStorageMb}
                 eventStatus={event.status}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import { buildOriginalStorageKey } from "@/lib/storage-keys"
 import {
+  calculateStorageUsedMb,
   getUploadDeletionKeys,
   isGalleryEligibleUpload,
   isUploadOwnedByEvent,
@@ -90,6 +91,18 @@ describe("delete behavior", () => {
       "events/evt/optimized/upl.webp",
       "events/evt/thumbnails/upl.webp",
     ])
+  })
+})
+
+describe("storage accounting", () => {
+  it("counts original and derivative assets toward event storage", () => {
+    expect(
+      calculateStorageUsedMb({
+        originalBytes: 2 * 1024 * 1024,
+        optimizedBytes: 512 * 1024,
+        thumbnailBytes: 256 * 1024,
+      })
+    ).toBe(3)
   })
 })
 

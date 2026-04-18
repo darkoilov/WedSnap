@@ -3,6 +3,7 @@ import "server-only"
 import { Prisma } from "@prisma/client"
 
 import { db } from "@/lib/db"
+import { calculateStorageUsedMb } from "@/lib/upload-policies"
 
 export const adminUploadSelect = {
   id: true,
@@ -14,6 +15,8 @@ export const adminUploadSelect = {
   mimeType: true,
   mediaType: true,
   sizeBytes: true,
+  optimizedSizeBytes: true,
+  thumbnailSizeBytes: true,
   width: true,
   height: true,
   status: true,
@@ -116,6 +119,8 @@ export async function markUploadUploaded(input: {
       status: "UPLOADED",
       storageKeyOptimized: input.storageKeyOptimized ?? null,
       storageKeyThumbnail: input.storageKeyThumbnail ?? null,
+      optimizedSizeBytes: null,
+      thumbnailSizeBytes: null,
       uploadedAt: new Date(),
     },
   })
@@ -125,6 +130,8 @@ export async function markUploadProcessed(input: {
   id: string
   storageKeyOptimized: string
   storageKeyThumbnail: string
+  optimizedSizeBytes: number
+  thumbnailSizeBytes: number
   width?: number | null
   height?: number | null
 }) {
@@ -134,6 +141,8 @@ export async function markUploadProcessed(input: {
       status: "PROCESSED",
       storageKeyOptimized: input.storageKeyOptimized,
       storageKeyThumbnail: input.storageKeyThumbnail,
+      optimizedSizeBytes: input.optimizedSizeBytes,
+      thumbnailSizeBytes: input.thumbnailSizeBytes,
       width: input.width ?? null,
       height: input.height ?? null,
       uploadedAt: new Date(),
@@ -161,11 +170,16 @@ export async function updateEventStorageUsedMb(eventId: string) {
     },
     _sum: {
       sizeBytes: true,
+      optimizedSizeBytes: true,
+      thumbnailSizeBytes: true,
     },
   })
 
-  const totalBytes = aggregate._sum.sizeBytes ?? 0
-  const storageUsedMb = Math.ceil(totalBytes / (1024 * 1024))
+  const storageUsedMb = calculateStorageUsedMb({
+    originalBytes: aggregate._sum.sizeBytes,
+    optimizedBytes: aggregate._sum.optimizedSizeBytes,
+    thumbnailBytes: aggregate._sum.thumbnailSizeBytes,
+  })
 
   await db.event.update({
     where: { id: eventId },

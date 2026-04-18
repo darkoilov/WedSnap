@@ -38,6 +38,7 @@ export default async function EventPage({ params }: EventPageProps) {
         location: publicEvent.location,
         status: publicEvent.status,
         allowGallery: publicEvent.allowGallery,
+        allowVideos: publicEvent.allowVideos,
         maxStorageMb: publicEvent.maxStorageMb,
         storageUsedMb: publicEvent.storageUsedMb,
       }}

@@ -18,6 +18,7 @@ interface SelectedFile {
 
 interface UploadSectionProps {
   uploadEnabled: boolean
+  allowVideos: boolean
   remainingStorageMb: number
   maxStorageMb: number
   eventStatus: EventStatus
@@ -26,6 +27,7 @@ interface UploadSectionProps {
 
 export function UploadSection({
   uploadEnabled,
+  allowVideos,
   remainingStorageMb,
   maxStorageMb,
   eventStatus,
@@ -150,7 +152,7 @@ export function UploadSection({
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*,video/*"
+        accept={allowVideos ? "image/*,video/*" : "image/*"}
         multiple
         onChange={handleFileSelect}
         className="hidden"
@@ -180,6 +182,11 @@ export function UploadSection({
           <p className="text-sm text-muted-foreground">
             Mozes da dodades povekje sliki odednas
           </p>
+          {!allowVideos && (
+            <p className="text-sm text-muted-foreground">
+              Ovoj nastan momentalno prima samo sliki.
+            </p>
+          )}
           <p className="text-sm text-muted-foreground">
             Ostanato: {remainingStorageMb} MB od {maxStorageMb} MB
           </p>

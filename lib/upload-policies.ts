@@ -33,6 +33,19 @@ export function getUploadDeletionKeys(input: {
   ].filter((key): key is string => Boolean(key))
 }
 
+export function calculateStorageUsedMb(input: {
+  originalBytes?: number | null
+  optimizedBytes?: number | null
+  thumbnailBytes?: number | null
+}) {
+  const totalBytes =
+    (input.originalBytes ?? 0) +
+    (input.optimizedBytes ?? 0) +
+    (input.thumbnailBytes ?? 0)
+
+  return Math.ceil(totalBytes / (1024 * 1024))
+}
+
 export function validateUploadInitRules(input: {
   eventStatus: "active" | "full" | "closed"
   allowVideos: boolean

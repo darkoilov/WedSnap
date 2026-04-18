@@ -55,6 +55,8 @@ model Upload {
   mimeType            String
   mediaType           MediaType
   sizeBytes           Int
+  optimizedSizeBytes  Int?
+  thumbnailSizeBytes  Int?
   width               Int?
   height              Int?
   status              UploadStatus @default(PENDING)

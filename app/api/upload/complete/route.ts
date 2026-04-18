@@ -118,6 +118,8 @@ export async function POST(request: Request) {
           id: upload.id,
           storageKeyOptimized: optimizedKey,
           storageKeyThumbnail: thumbnailKey,
+          optimizedSizeBytes: derivatives.optimizedBuffer.length,
+          thumbnailSizeBytes: derivatives.thumbnailBuffer.length,
           width: derivatives.width,
           height: derivatives.height,
         })
