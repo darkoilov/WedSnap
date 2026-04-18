@@ -41,7 +41,7 @@ export default async function EventGalleryPage({
           </h1>
           <p className="mb-4 text-lg text-muted-foreground">
             {event.name}
-            {event.eventDate ? ` · ${event.eventDate}` : ""}
+            {event.eventDate ? ` | ${event.eventDate}` : ""}
           </p>
           {event.allowGallery ? (
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">

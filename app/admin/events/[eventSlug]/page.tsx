@@ -6,6 +6,8 @@ import { getSignedReadUrl } from "@/lib/r2"
 import { getUploadsForEvent } from "@/lib/uploads"
 import { eventSlugSchema } from "@/lib/validation"
 
+type AdminUploadRecord = Awaited<ReturnType<typeof getUploadsForEvent>>[number]
+
 interface AdminEventPageProps {
   params: Promise<{
     eventSlug: string
@@ -28,7 +30,7 @@ export default async function AdminEventPage({ params }: AdminEventPageProps) {
 
   const uploads = await getUploadsForEvent(event.id)
   const hydratedUploads = await Promise.all(
-    uploads.map(async (upload) => ({
+    uploads.map(async (upload: AdminUploadRecord) => ({
       id: upload.id,
       url: await getSignedReadUrl(upload.storageKeyOriginal),
       thumbnailUrl: upload.storageKeyThumbnail
